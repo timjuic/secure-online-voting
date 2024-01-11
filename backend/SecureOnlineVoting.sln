@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureOnlineVoting", "SecureOnlineVoting\SecureOnlineVoting.csproj", "{D4A2C5C7-9007-4FBF-B813-FA500F4A4CD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "database", "Database\database.csproj", "{256E2DD1-0A49-4FEE-9D1C-37023DF70A65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{256E2DD1-0A49-4FEE-9D1C-37023DF70A65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "services", "services\services.csproj", "{18A49CD3-0FC5-492D-8ABD-422231392BA2}"
 EndProject
