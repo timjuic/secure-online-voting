@@ -4,14 +4,25 @@ using Microsoft.AspNetCore.Mvc;
 namespace SecureOnlineVoting
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ApiController : ControllerBase
     {
         [HttpGet]
-        [Route("smt")]
-        public ActionResult<string> ReturnsSomething()
+        [Route("Users")]
+        public ActionResult<string> ReturnUsername()
         {
-            return "String kul";
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+            // Combine the current directory and the database file name
+            string databaseFileName = "database";
+            string fullPath = Path.Combine(currentDirectory, databaseFileName);
+
+            string connectionString = $"Data Source={fullPath}";
+
+            DatabaseService dbHelper = new DatabaseService(connectionString);
+            var users = dbHelper.GetUsers();
+            
+            return users[0].first_name;
         }
     }
 }
