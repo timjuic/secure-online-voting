@@ -1,12 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Database.data_access;
+using Database.models;
 
 namespace services.services
 {
-    internal class VoterService
+    public class VoterService
     {
+        private readonly VoterRepository _voterRepository;
+
+        public VoterService(VoterRepository voterRepository)
+        {
+            _voterRepository = voterRepository;
+        }
+
+        public async Task CreateVoterAsync(Voter voter)
+        {
+            // Additional business logic/validation can be added here
+            await _voterRepository.CreateVoterAsync(voter);
+        }
+
+        public async Task<List<Voter>> GetAllVotersAsync()
+        {
+            return await _voterRepository.GetAllVotersAsync();
+        }
+
+        public async Task<Voter> GetVoterByIdAsync(int voterId)
+        {
+            return await _voterRepository.GetVoterByIdAsync(voterId);
+        }
+
+        public async Task UpdateVoterAsync(Voter voter)
+        {
+            // Additional business logic/validation can be added here
+            await _voterRepository.UpdateVoterAsync(voter);
+        }
+
+        public async Task DeleteVoterAsync(int voterId)
+        {
+            // Additional business logic/validation can be added here
+            await _voterRepository.DeleteVoterAsync(voterId);
+        }
     }
+}
 }
