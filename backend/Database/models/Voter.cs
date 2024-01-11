@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Database.models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +14,10 @@ namespace Database.models
         public int VoterId { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
 
         [Required]
         public string Email { get; set; }
@@ -22,6 +26,8 @@ namespace Database.models
         public string Password { get; set; }
 
         public DateTime RegistrationDate { get; set; }
+
+        public int IsAdmin { get; set; } // Adjust the type based on your needs
 
         // Navigation property
         public List<Vote> Votes { get; set; }
