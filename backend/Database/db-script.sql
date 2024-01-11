@@ -1,10 +1,12 @@
 -- Voters Table
 CREATE TABLE Voters (
     voter_id INTEGER PRIMARY KEY,
-    name TEXT,
+    first_name TEXT,
+    last_name TEXT,
     email TEXT,
     password TEXT,
-    registration_date DATETIME
+    registration_date DATETIME,
+    is_admin INTEGER DEFAULT 0
 );
 
 -- Candidates Table
