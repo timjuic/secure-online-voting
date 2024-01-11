@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Database.data_access
 {
-    public class VotesRepository
+    public class VoteRepository
     {
         private readonly DatabaseContext _dbContext;
 
-        public VotesRepository(DatabaseContext dbContext)
+        public VoteRepository(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }
