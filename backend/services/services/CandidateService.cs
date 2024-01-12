@@ -1,4 +1,5 @@
-﻿using Database.data_access;
+﻿using Database;
+using Database.data_access;
 using Database.models;
 
 namespace services.services
@@ -7,14 +8,9 @@ namespace services.services
     {
         private readonly CandidateRepository _candidateRepository;
 
-        public CandidateService(CandidateRepository candidateRepository)
-        {
-            _candidateRepository = candidateRepository;
-        }
-
         public CandidateService()
         {
-                
+            _candidateRepository = RepositoryDependencyProvider.GetCandidateRepository();
         }
 
         public async Task CreateCandidateAsync(Candidate candidate)

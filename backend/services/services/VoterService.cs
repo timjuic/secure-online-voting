@@ -1,4 +1,5 @@
-﻿using Database.data_access;
+﻿using Database;
+using Database.data_access;
 using Database.models;
 
 namespace services.services
@@ -7,14 +8,9 @@ namespace services.services
     {
         private readonly VoterRepository _voterRepository;
 
-        public VoterService(VoterRepository voterRepository)
-        {
-            _voterRepository = voterRepository;
-        }
-
         public VoterService()
         {
-                
+            _voterRepository = RepositoryDependencyProvider.GetVoterRepository();       
         }
 
         public async Task CreateVoterAsync(Voter voter)

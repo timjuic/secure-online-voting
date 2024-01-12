@@ -15,7 +15,8 @@ namespace Database
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Configure your database connection here
-            optionsBuilder.UseSqlite("Data Source=database.sqlite");
+            string databaseFilePath = "../database.sqlite";
+            optionsBuilder.UseSqlite($"Data Source={databaseFilePath}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

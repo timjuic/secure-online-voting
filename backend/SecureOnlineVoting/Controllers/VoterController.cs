@@ -27,6 +27,7 @@ namespace SecureOnlineVoting.Controllers
         public async Task<ActionResult<List<Voter>>> GetAllVoters()
         {
             var response = await service.GetAllVotersAsync();
+            Console.WriteLine("Got it");
             if (response.Count > 0)
             {
                 return Ok(response);
