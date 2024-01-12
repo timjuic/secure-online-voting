@@ -12,6 +12,11 @@ namespace services.services
             _electionRepository = electionRepository;
         }
 
+        public ElectionService()
+        {
+                
+        }
+
         public async Task CreateElectionAsync(Election election)
         {
             // Additional business logic/validation can be added here

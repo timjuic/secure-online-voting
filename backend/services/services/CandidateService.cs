@@ -12,6 +12,11 @@ namespace services.services
             _candidateRepository = candidateRepository;
         }
 
+        public CandidateService()
+        {
+                
+        }
+
         public async Task CreateCandidateAsync(Candidate candidate)
         {
             // Additional business logic/validation can be added here

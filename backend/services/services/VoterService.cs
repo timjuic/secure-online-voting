@@ -12,6 +12,11 @@ namespace services.services
             _voterRepository = voterRepository;
         }
 
+        public VoterService()
+        {
+                
+        }
+
         public async Task CreateVoterAsync(Voter voter)
         {
             // Additional business logic/validation can be added here
@@ -40,5 +45,5 @@ namespace services.services
             await _voterRepository.DeleteVoterAsync(voterId);
         }
     }
-}
+
 }
