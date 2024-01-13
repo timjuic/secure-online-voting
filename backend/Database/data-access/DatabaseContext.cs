@@ -1,8 +1,12 @@
 ﻿using Database.models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-
-namespace Database
+namespace Database.data_access
 {
     public class DatabaseContext : DbContext
     {
@@ -14,9 +18,23 @@ namespace Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Configure your database connection here
-            string databaseFilePath = "../database.sqlite";
-            optionsBuilder.UseSqlite($"Data Source={databaseFilePath}");
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+            // Move up one level
+            string parentDirectory = Directory.GetParent(currentDirectory)?.FullName;
+
+            if (parentDirectory != null)
+            {
+                string databaseFilePath = Path.Combine(parentDirectory, "Database", "database.sqlite");
+                Console.WriteLine(databaseFilePath);
+                optionsBuilder.UseSqlite($"Data Source={databaseFilePath}");
+            }
+            else
+            {
+                // Handle the case where we couldn't get the parent directory
+                // Log an error, throw an exception, or handle it as appropriate for your scenario.
+                throw new InvalidOperationException("Could not determine parent directory.");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

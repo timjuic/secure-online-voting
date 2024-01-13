@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,18 +12,19 @@ namespace Database.models
     public class Vote
     {
         [Key]
+        [Column("vote_id")]
         public int VoteId { get; set; }
 
-        [Required]
+        [Column("voter_id")]
         public int VoterId { get; set; }
 
-        [Required]
+        [Column("election_id")]
         public int ElectionId { get; set; }
 
-        [Required]
+        [Column("candidate_id")]
         public int CandidateId { get; set; }
 
-        [Required]
+        [Column("vote_timestamp")]
         public DateTime VoteTimestamp { get; set; }
 
         // Navigation properties
