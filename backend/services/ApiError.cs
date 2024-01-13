@@ -21,6 +21,7 @@ namespace services
 
         public static ApiError ERR_DATABASE_ERROR => new ApiError(1000, "ERR_DATABASE_ERROR", "An error occurred in the database!");
         public static ApiError ERR_CANDIDATE_NOT_FOUND => new ApiError(1001, "ERR_CANDIDATE_NOT_FOUND", "Candidate with specified ID couldn't be found!");
+        public static ApiError ERR_CANDIDATE_DOESNT_EXIST => new ApiError(23, "ERR_CANDIDATE_DOESNT_EXIST", "Candidate with specified ID doesn't exist!");
         // Add more static properties as needed
     }
 }

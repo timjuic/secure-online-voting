@@ -89,9 +89,16 @@ namespace services.services
         {
             try
             {
-                // Additional business logic/validation can be added here
+                Candidate candidate = await _candidateRepository.GetCandidateByIdAsync(candidateId);
+
+                if (candidate == null)
+                {
+                    return ApiResponse<bool>.MakeFailure(ApiError.ERR_CANDIDATE_DOESNT_EXIST);
+                }
+
                 await _candidateRepository.DeleteCandidateAsync(candidateId);
-                return ApiResponse<bool>.MakeSuccess(true);
+
+                return ApiResponse<bool>.MakeSuccess(true, $"Candidate with ID: {candidateId} was successfully deleted!");
             }
             catch (Exception ex)
             {
