@@ -29,8 +29,8 @@ namespace Database.models
         [Column("is_active")]
         public int IsActive { get; set; }
 
-        // Navigation property
-        public List<CandidateElection> CandidateElections { get; set; }
-        public List<Vote> Votes { get; set; }
+        // Navigation properties
+        public List<CandidateElection>? CandidateElections { get; set; }
+        public List<Vote>? Votes { get; set; }
     }
 }

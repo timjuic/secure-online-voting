@@ -30,6 +30,13 @@ namespace Database.data_access
 
         public async Task UpdateElectionAsync(Election election)
         {
+            // Detach existing entity, if it's being tracked
+            var existingEntry = _dbContext.ChangeTracker.Entries<Election>().FirstOrDefault(x => x.Entity.ElectionId == election.ElectionId);
+            if (existingEntry != null)
+            {
+                existingEntry.State = EntityState.Detached;
+            }
+
             _dbContext.Entry(election).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }

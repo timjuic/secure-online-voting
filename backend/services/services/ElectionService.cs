@@ -13,32 +13,93 @@ namespace services.services
             _electionRepository = RepositoryDependencyProvider.GetElectionRepository();
         }
 
-        public async Task CreateElectionAsync(Election election)
+        public async Task<ApiResponse<bool>> CreateElectionAsync(Election election)
         {
-            // Additional business logic/validation can be added here
-            await _electionRepository.CreateElectionAsync(election);
+            try
+            {
+                // Additional business logic/validation can be added here
+                await _electionRepository.CreateElectionAsync(election);
+                return ApiResponse<bool>.MakeSuccess(true, "Election created successfully");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task<List<Election>> GetAllElectionsAsync()
+        public async Task<ApiResponse<List<Election>>> GetAllElectionsAsync()
         {
-            return await _electionRepository.GetAllElectionsAsync();
+            try
+            {
+                var elections = await _electionRepository.GetAllElectionsAsync();
+                return ApiResponse<List<Election>>.MakeSuccess(elections);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<List<Election>>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task<Election> GetElectionByIdAsync(int electionId)
+        public async Task<ApiResponse<Election>> GetElectionByIdAsync(int electionId)
         {
-            return await _electionRepository.GetElectionByIdAsync(electionId);
+            try
+            {
+                var election = await _electionRepository.GetElectionByIdAsync(electionId);
+                if (election == null)
+                {
+                    return ApiResponse<Election>.MakeFailure(ApiError.ERR_ELECTION_DOESNT_EXIST);
+                }
+
+                return ApiResponse<Election>.MakeSuccess(election);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<Election>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task UpdateElectionAsync(Election election)
+        public async Task<ApiResponse<bool>> UpdateElectionAsync(Election election)
         {
-            // Additional business logic/validation can be added here
-            await _electionRepository.UpdateElectionAsync(election);
+            try
+            {
+                var existingElection = await _electionRepository.GetElectionByIdAsync(election.ElectionId);
+                if (existingElection == null)
+                {
+                    return ApiResponse<bool>.MakeFailure(ApiError.ERR_ELECTION_DOESNT_EXIST);
+                }
+
+                await _electionRepository.UpdateElectionAsync(election);
+                return ApiResponse<bool>.MakeSuccess(true, "Election updated successfully");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task DeleteElectionAsync(int electionId)
+
+        public async Task<ApiResponse<bool>> DeleteElectionAsync(int electionId)
         {
-            // Additional business logic/validation can be added here
-            await _electionRepository.DeleteElectionAsync(electionId);
+            try
+            {
+                Election election = await _electionRepository.GetElectionByIdAsync(electionId);
+                if (election == null)
+                {
+                    return ApiResponse<bool>.MakeFailure(ApiError.ERR_ELECTION_DOESNT_EXIST);
+                }
+
+                await _electionRepository.DeleteElectionAsync(electionId);
+                return ApiResponse<bool>.MakeSuccess(true, $"Election with ID {electionId} was successfully deleted");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
     }
 }
