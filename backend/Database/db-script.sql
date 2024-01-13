@@ -5,7 +5,7 @@ CREATE TABLE Voters (
     last_name TEXT,
     email TEXT UNIQUE,
     password TEXT,
-    registration_date DATETIME,
+    registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     is_admin INTEGER DEFAULT 0
 );
 
