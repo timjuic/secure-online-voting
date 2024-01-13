@@ -1,88 +1,63 @@
 ﻿using Database.models;
 using Microsoft.AspNetCore.Mvc;
+using services;
 using services.services;
-
-namespace SecureOnlineVoting.Controllers
+[ApiController]
+[Route("[controller]")]
+public class CandidateController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class CandidateController : ControllerBase
+    private readonly CandidateService _service;
+
+    public CandidateController()
     {
-        CandidateService service = new CandidateService();
+        _service = new CandidateService();
+    }
 
-        [HttpPost]
-        [Route("Candidates/CreateCandidate")]
-        public ActionResult<bool> CreateCandidate(Candidate candidate)
-        {
-            var response = service.CreateCandidateAsync(candidate);
-            if (response.IsCanceled == true)
-            {
-                return false;
-            }
-            return true;
-        }
+    [HttpPost]
+    [Route("Candidates/CreateCandidate")]
+    public async Task<ActionResult<ApiResponse<Candidate>>> CreateCandidate(Candidate candidate)
+    {
+        ApiResponse<Candidate> response = await _service.CreateCandidateAsync(candidate);
+        return response.ToActionResult();
+    }
 
-        [HttpDelete]
-        [Route("Candidates/DeleteCandidate")]
-        public ActionResult<bool> DeleteCandidate(int candidateID)
-        {
-            var response = service.DeleteCandidateAsync(candidateID);
-            if (response.IsCanceled == true)
-            {
-                return false;
-            }
-            return true;
-        }
+    [HttpDelete]
+    [Route("Candidates/DeleteCandidate")]
+    public async Task<ActionResult<ApiResponse<bool>>> DeleteCandidate(int candidateID)
+    {
+        ApiResponse<bool> response = await _service.DeleteCandidateAsync(candidateID);
+        return response.ToActionResult();
+    }
 
-        [HttpPost]
-        [Route("Candidates/UpdateCandidate")]
-        public ActionResult<bool> Updatecandidate(Candidate candidate)
-        {
-            var response = service.UpdateCandidateAsync(candidate);
-            if (response.IsCanceled == true)
-            {
-                return false;
-            }
-            return true;
-        }
+    [HttpPost]
+    [Route("Candidates/UpdateCandidate")]
+    public async Task<ActionResult<ApiResponse<bool>>> UpdateCandidate(Candidate candidate)
+    {
+        ApiResponse<bool> response = await _service.UpdateCandidateAsync(candidate);
+        return response.ToActionResult();
+    }
 
-        [HttpGet]
-        [Route("Candidates/GetAllCandidates")]
-        public async Task<ActionResult<List<Candidate>>> GetAllCandidates()
-        {
-            var response = await service.GetAllCandidatesAsync();
-            if (response.Count > 0)
-            {
-                return Ok(response);
-            }
-           
-            return null;
-        }
+    [HttpGet]
+    [Route("Candidates/GetAllCandidates")]
+    public async Task<ActionResult<ApiResponse<List<Candidate>>>> GetAllCandidates()
+    {
+        ApiResponse<List<Candidate>> response = await _service.GetAllCandidatesAsync();
+        return response.ToActionResult();
+    }
 
-        [HttpGet]
-        [Route("Candidates/GetCandidateById")]
-        public async Task<ActionResult<Candidate>> GetCandidateById(int candidateID)
-        {
-            var response = await service.GetCandidateByIdAsync(candidateID);
-            if (response is not null)
-            {
-                return Ok(response);
-            }
+    [HttpGet]
+    [Route("Candidates/GetCandidateById")]
+    public async Task<ActionResult<ApiResponse<Candidate>>> GetCandidateById(int candidateID)
+    {
+        ApiResponse<Candidate> response = await _service.GetCandidateByIdAsync(candidateID);
+        return response.ToActionResult();
+    }
 
-            return null;
-        }
-
-        [HttpGet]
-        [Route("Candidates/GetCandidateByElection")]
-        public async Task<ActionResult<List<Candidate>>> GetCandidatesByElection(int electionID)
-        {
-            var response = await service.GetCandidatesByElectionAsync(electionID);
-            if (response.Count > 0)
-            {
-                return Ok(response);
-            }
-            return null;
-        }
- 
+    [HttpGet]
+    [Route("Candidates/GetCandidateByElection")]
+    public async Task<ActionResult<ApiResponse<List<Candidate>>>> GetCandidatesByElection(int electionID)
+    {
+        ApiResponse<List<Candidate>> response = await _service.GetCandidatesByElectionAsync(electionID);
+        return response.ToActionResult();
     }
 }

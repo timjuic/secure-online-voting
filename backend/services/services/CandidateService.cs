@@ -13,37 +13,91 @@ namespace services.services
             _candidateRepository = RepositoryDependencyProvider.GetCandidateRepository();
         }
 
-        public async Task CreateCandidateAsync(Candidate candidate)
+        public async Task<ApiResponse<Candidate>> CreateCandidateAsync(Candidate candidate)
         {
-            // Additional business logic/validation can be added here
-            await _candidateRepository.CreateCandidateAsync(candidate);
+            try
+            {
+                // Additional business logic/validation can be added here
+                Candidate createdCandidate = await _candidateRepository.CreateCandidateAsync(candidate);
+                return ApiResponse<Candidate>.MakeSuccess(createdCandidate, "Candidate successfully created!");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<Candidate>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task<List<Candidate>> GetAllCandidatesAsync()
+        public async Task<ApiResponse<List<Candidate>>> GetAllCandidatesAsync()
         {
-            return await _candidateRepository.GetAllCandidatesAsync();
+            try
+            {
+                var candidates = await _candidateRepository.GetAllCandidatesAsync();
+                return ApiResponse<List<Candidate>>.MakeSuccess(candidates);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<List<Candidate>>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task<Candidate> GetCandidateByIdAsync(int candidateId)
+        public async Task<ApiResponse<Candidate>> GetCandidateByIdAsync(int candidateId)
         {
-            return await _candidateRepository.GetCandidateByIdAsync(candidateId);
+            try
+            {
+                var candidate = await _candidateRepository.GetCandidateByIdAsync(candidateId);
+                return candidate != null ? ApiResponse<Candidate>.MakeSuccess(candidate) : ApiResponse<Candidate>.MakeFailure(ApiError.ERR_CANDIDATE_NOT_FOUND);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<Candidate>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task<List<Candidate>> GetCandidatesByElectionAsync(int electionId)
+        public async Task<ApiResponse<List<Candidate>>> GetCandidatesByElectionAsync(int electionId)
         {
-            return await _candidateRepository.GetCandidatesByElectionAsync(electionId);
+            try
+            {
+                var candidates = await _candidateRepository.GetCandidatesByElectionAsync(electionId);
+                return ApiResponse<List<Candidate>>.MakeSuccess(candidates);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<List<Candidate>>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task UpdateCandidateAsync(Candidate candidate)
+        public async Task<ApiResponse<bool>> UpdateCandidateAsync(Candidate candidate)
         {
-            // Additional business logic/validation can be added here
-            await _candidateRepository.UpdateCandidateAsync(candidate);
+            try
+            {
+                // Additional business logic/validation can be added here
+                await _candidateRepository.UpdateCandidateAsync(candidate);
+                return ApiResponse<bool>.MakeSuccess(true);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task DeleteCandidateAsync(int candidateId)
+        public async Task<ApiResponse<bool>> DeleteCandidateAsync(int candidateId)
         {
-            // Additional business logic/validation can be added here
-            await _candidateRepository.DeleteCandidateAsync(candidateId);
+            try
+            {
+                // Additional business logic/validation can be added here
+                await _candidateRepository.DeleteCandidateAsync(candidateId);
+                return ApiResponse<bool>.MakeSuccess(true);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
     }
 }

@@ -12,11 +12,13 @@ namespace Database.data_access
             _dbContext = dbContext;
         }
 
-        public async Task CreateCandidateAsync(Candidate candidate)
+        public async Task<Candidate> CreateCandidateAsync(Candidate candidate)
         {
             _dbContext.Candidates.Add(candidate);
             await _dbContext.SaveChangesAsync();
+            return candidate;
         }
+
 
         public async Task<List<Candidate>> GetAllCandidatesAsync()
         {

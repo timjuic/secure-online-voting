@@ -23,8 +23,8 @@ namespace Database.models
         [Column("position")]
         public string Position { get; set; }
 
-        // Navigation properties
-        public List<CandidateElection> CandidateElections { get; set; }
-        public List<Vote> Votes { get; set; }
+        // Navigation properties (made nullable)
+        public List<CandidateElection>? CandidateElections { get; set; }
+        public List<Vote>? Votes { get; set; }
     }
 }
