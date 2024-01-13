@@ -7,10 +7,12 @@ namespace services.services
     public class CandidateService
     {
         private readonly CandidateRepository _candidateRepository;
+        private readonly ElectionRepository _electionRepository;
 
         public CandidateService()
         {
             _candidateRepository = RepositoryDependencyProvider.GetCandidateRepository();
+            _electionRepository = RepositoryDependencyProvider.GetElectionRepository();
         }
 
         public async Task<ApiResponse<Candidate>> CreateCandidateAsync(Candidate candidate)
@@ -47,7 +49,7 @@ namespace services.services
             try
             {
                 var candidate = await _candidateRepository.GetCandidateByIdAsync(candidateId);
-                return candidate != null ? ApiResponse<Candidate>.MakeSuccess(candidate) : ApiResponse<Candidate>.MakeFailure(ApiError.ERR_CANDIDATE_NOT_FOUND);
+                return candidate != null ? ApiResponse<Candidate>.MakeSuccess(candidate) : ApiResponse<Candidate>.MakeFailure(ApiError.ERR_CANDIDATE_DOESNT_EXIST);
             }
             catch (Exception ex)
             {
@@ -60,6 +62,13 @@ namespace services.services
         {
             try
             {
+                Election election = await _electionRepository.GetElectionByIdAsync(electionId);
+
+                if (election == null)
+                {
+                    return ApiResponse<List<Candidate>>.MakeFailure(ApiError.ERR_ELECTION_DOESNT_EXIST);
+                }
+
                 var candidates = await _candidateRepository.GetCandidatesByElectionAsync(electionId);
                 return ApiResponse<List<Candidate>>.MakeSuccess(candidates);
             }
