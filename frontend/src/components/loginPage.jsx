@@ -1,8 +1,10 @@
 import React from 'react';
 import { TextField, Button, Paper, Typography, Container } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-export default function loginPage() {
+export default function LoginPage() {
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -10,7 +12,9 @@ export default function loginPage() {
       email: data.get('email'),
       password: data.get('password'),
     });
-    // todo - logic
+
+    // TODO: Implement login logic here
+    navigate('/election');
   };
 
   return (
@@ -51,12 +55,10 @@ export default function loginPage() {
           >
             Login
           </Button>
-          <Typography align="center">
           <Typography align="center" variant="body2">
             <Link to="/register">
-            Don't have an account? Register
+              Don't have an account? Register
             </Link>
-          </Typography>
           </Typography>
         </form>
       </Paper>
