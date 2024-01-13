@@ -29,6 +29,7 @@ namespace services
         public static ApiError ERR_INVALID_LAST_NAME => new ApiError(29, "ERR_INVALID_LAST_NAME", "Last name must contain only letters and be between 2 and 50 characters.");
         public static ApiError ERR_INVALID_EMAIL => new ApiError(30, "ERR_INVALID_EMAIL", "Invalid email format!");
         public static ApiError ERR_INVALID_PASSWORD => new ApiError(31, "ERR_INVALID_PASSWORD", "Password must be at least 8 characters long and contain both letters and numbers.");
+        public static ApiError ERR_INVALID_CREDENTIALS => new ApiError(32, "ERR_INVALID_CREDENTIALS", "Invalid Credentials! Email and password don't match!");
 
         // Add more static properties as needed
     }

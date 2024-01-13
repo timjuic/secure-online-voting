@@ -1,7 +1,10 @@
 ﻿using Database;
 using Database.data_access;
 using Database.models;
-using System.Diagnostics.Metrics;
+using Database.requests;
+using Database.responses;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace services.services
 {
@@ -14,27 +17,41 @@ namespace services.services
             _voterRepository = RepositoryDependencyProvider.GetVoterRepository();
         }
 
-        //public async Task<ApiResponse<Voter>> LoginUserAsync(String request)
-        //{
-        //    //try
-        //    //{
-        //    //    // Validate user credentials (replace with your authentication logic)
-        //    //    if (IsValidUser(request.Username, request.Password))
-        //    //    {
-        //    //        // Retrieve user details (replace with your user retrieval logic)
-        //    //        var user = await _userRepository.GetUserByUsernameAsync(request.Username);
+        public async Task<ApiResponse<LoginResponseData>> LoginUserAsync(LoginRequest loginData, IConfiguration configuration)
+        {
+            
+                bool userExists = await _voterRepository.VoterExistsAsync(loginData.Email, loginData.Password);
+                if (!userExists)
+                {
+                    return ApiResponse<LoginResponseData>.MakeFailure(ApiError.ERR_INVALID_CREDENTIALS);
+                }
 
-        //    //        return ApiResponse<User>.MakeSuccess(user, "User successfully logged in!");
-        //    //    }
+                Voter voter = await _voterRepository.GetVoterByEmailAsync(loginData.Email);
 
-        //    //    return ApiResponse<User>.MakeFailure(ApiError.ERR_INVALID_CREDENTIALS);
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    // Log the exception if needed
-        //    //    return ApiResponse<User>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
-        //    //}
-        //}
+                var jwtTokenResult = JwtHelper.GenerateToken(voter, configuration);
+
+                var responseData = new LoginResponseData
+                {
+                    JwtToken = jwtTokenResult,
+                    User = new UserResponseData
+                    {
+                        Id = voter.VoterId,
+                        FirstName = voter.FirstName,
+                        LastName = voter.LastName,
+                        Email = voter.Email,
+                        IsAdmin = voter.IsAdmin,
+                        RegistrationDate = voter.RegistrationDate
+                    }
+                };
+
+                return ApiResponse<LoginResponseData>.MakeSuccess(responseData, "Login successful!");
+            
+            
+        }
+
+
+
+
 
         public async Task<ApiResponse<bool>> RegisterUserAsync(Voter newVoter)
         {

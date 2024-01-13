@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Database.models;
+using Database.responses;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -12,15 +14,16 @@ namespace services
 {
     public static class JwtHelper
     {
-        public static string GenerateToken(string username, IConfiguration configuration)
+        public static JwtTokenResult GenerateToken(Voter voter, IConfiguration configuration)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]));
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
-            new Claim(ClaimTypes.Name, username),
-            // Add additional claims as needed
-        };
+                new Claim(ClaimTypes.Name, voter.FirstName + " " + voter.LastName),
+                new Claim(ClaimTypes.Email, voter.Email),
+                // Add other claims as needed
+            };
 
             var token = new JwtSecurityToken(
                 issuer: configuration["JwtSettings:Issuer"],
@@ -30,7 +33,14 @@ namespace services
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenResult = new JwtTokenResult
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                ExpiresAt = token.ValidTo,
+                // Add other JWT-related information as needed
+            };
+
+            return tokenResult;
         }
 
         public static ClaimsPrincipal ValidateToken(string token, IConfiguration configuration)

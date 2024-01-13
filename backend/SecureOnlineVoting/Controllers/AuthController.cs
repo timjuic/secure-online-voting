@@ -1,4 +1,6 @@
 using Database.models;
+using Database.requests;
+using Database.responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using services;
@@ -17,19 +19,12 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
 
-    //[HttpPost("login")]
-    //public async IActionResult Login([FromBody] String model)
-    //{
-    //    //// Validate user credentials (replace with your authentication logic)
-    //    //if (IsValidUser(model.Username, model.Password))
-    //    //{
-    //    //    // Generate JWT token
-    //    //    var token = JwtHelper.GenerateToken(model.Username, _configuration);
-    //    //    return Ok(new { Token = token });
-    //    //}
-
-    //    //return Unauthorized(new { Message = "Invalid credentials" });
-    //}
+    [HttpPost("login")]
+    public async Task<ActionResult<ApiResponse<LoginResponseData>>> Login([FromBody] LoginRequest loginData)
+    {
+        ApiResponse<LoginResponseData> response = await _authService.LoginUserAsync(loginData, _configuration);
+        return response.ToActionResult();
+    }
 
     [HttpPost]
     [Route("register")]
