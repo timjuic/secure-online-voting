@@ -40,6 +40,6 @@ namespace Database.models
 
         // Navigation property
         [JsonIgnore]
-        public List<Vote> Votes { get; set; }
+        public List<Vote>? Votes { get; set; }
     }
 }
