@@ -3,7 +3,7 @@ CREATE TABLE Voters (
     voter_id INTEGER PRIMARY KEY,
     first_name TEXT,
     last_name TEXT,
-    email TEXT,
+    email TEXT UNIQUE,
     password TEXT,
     registration_date DATETIME,
     is_admin INTEGER DEFAULT 0
@@ -12,7 +12,7 @@ CREATE TABLE Voters (
 -- Candidates Table
 CREATE TABLE Candidates (
     candidate_id INTEGER PRIMARY KEY,
-    name TEXT,
+    name TEXT UNIQUE,
     party_affiliation TEXT,
     position TEXT
 );
@@ -20,7 +20,7 @@ CREATE TABLE Candidates (
 -- Elections Table
 CREATE TABLE Elections (
     election_id INTEGER PRIMARY KEY,
-    title TEXT,
+    title TEXT UNIQUE,
     description TEXT,
     start_date DATETIME,
     end_date DATETIME,
