@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 
@@ -28,6 +29,7 @@ namespace Database.models
         public DateTime VoteTimestamp { get; set; }
 
         // Navigation properties
+        [JsonIgnore]
         public Voter Voter { get; set; }
         public Election Election { get; set; }
         public Candidate Candidate { get; set; }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Database.models
@@ -38,6 +39,7 @@ namespace Database.models
         public int IsAdmin { get; set; } // Adjust the type based on your needs
 
         // Navigation property
+        [JsonIgnore]
         public List<Vote> Votes { get; set; }
     }
 }
