@@ -83,13 +83,11 @@ namespace services.services
         {
             try
             {
-                // Additional business logic/validation can be added here
                 await _candidateRepository.UpdateCandidateAsync(candidate);
                 return ApiResponse<bool>.MakeSuccess(true);
             }
             catch (Exception ex)
             {
-                // Log the exception if needed
                 return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
             }
         }
