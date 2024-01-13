@@ -12,11 +12,13 @@ namespace Database.data_access
             _dbContext = dbContext;
         }
 
-        public async Task CreateVoterAsync(Voter voter)
+        public async Task<Voter> CreateVoterAsync(Voter voter)
         {
             _dbContext.Entry(voter).State = EntityState.Detached;
             _dbContext.Voters.Add(voter);
             await _dbContext.SaveChangesAsync();
+
+            return voter;
         }
 
         public async Task<List<Voter>> GetAllVotersAsync()
