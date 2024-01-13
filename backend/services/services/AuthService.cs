@@ -3,6 +3,7 @@ using Database.data_access;
 using Database.models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,9 +45,28 @@ namespace services.services
         {
             try
             {
+                if (ValidationHelper.IsValidFirstName(newVoter.FirstName))
+                {
+                    return ApiResponse<Voter>.MakeFailure(ApiError.ERR_INVALID_FIRST_NAME);
+                }
 
+                if (ValidationHelper.IsValidLastName(newVoter.LastName))
+                {
+                    return ApiResponse<Voter>.MakeFailure(ApiError.ERR_INVALID_LAST_NAME);
+                }
+
+                if (ValidationHelper.IsValidFirstName(newVoter.Email))
+                {
+                    return ApiResponse<Voter>.MakeFailure(ApiError.ERR_INVALID_LAST_NAME);
+                }
+
+                if (ValidationHelper.IsValidPassword(newVoter.Password))
+                {
+                    return ApiResponse<Voter>.MakeFailure(ApiError.ERR_INVALID_PASSWORD);
+                }
+
+                // If validation passes, proceed with creating the voter
                 Voter createdUser = await _voterRepository.CreateVoterAsync(newVoter);
-
                 return ApiResponse<Voter>.MakeSuccess(createdUser, "User successfully registered!");
             }
             catch (Exception ex)
