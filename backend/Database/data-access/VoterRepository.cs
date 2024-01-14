@@ -73,5 +73,12 @@ namespace Database.data_access
         {
             return await _dbContext.Voters.AnyAsync(v => v.VoterId == voterId);
         }
+
+        public async Task<string> GetPasswordHashByEmailAsync(string email)
+        {
+            var user = await _dbContext.Voters.SingleOrDefaultAsync(v => v.Email == email);
+            return user?.Password;
+        }
+
     }
 }

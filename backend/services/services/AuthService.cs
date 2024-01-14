@@ -18,9 +18,20 @@ namespace services.services
 
         public async Task<ApiResponse<LoginResponseData>> LoginUserAsync(LoginRequest loginData, IConfiguration configuration)
         {
-            
-                bool userExists = await _voterRepository.VoterExistsAsync(loginData.Email, loginData.Password);
+            try
+            {
+                bool userExists = await _voterRepository.VoterExistsByEmailAsync(loginData.Email);
+
                 if (!userExists)
+                {
+                    return ApiResponse<LoginResponseData>.MakeFailure(ApiError.ERR_INVALID_CREDENTIALS);
+                }
+
+                string storedHashedPassword = await _voterRepository.GetPasswordHashByEmailAsync(loginData.Email);
+
+                bool passwordMatches = PasswordHasher.VerifyPassword(loginData.Password, storedHashedPassword);
+
+                if (!passwordMatches)
                 {
                     return ApiResponse<LoginResponseData>.MakeFailure(ApiError.ERR_INVALID_CREDENTIALS);
                 }
@@ -44,7 +55,13 @@ namespace services.services
                 };
 
                 return ApiResponse<LoginResponseData>.MakeSuccess(responseData, "Login successful!");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<LoginResponseData>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
+
 
 
         public async Task<ApiResponse<bool>> RegisterUserAsync(Voter newVoter)
@@ -78,6 +95,9 @@ namespace services.services
                     return ApiResponse<bool>.MakeFailure(ApiError.ERR_INVALID_EMAIL_DOMAIN);
                 }
 
+
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newVoter.Password, BCrypt.Net.BCrypt.GenerateSalt());
+                newVoter.Password = hashedPassword;
 
                 bool voterExists = await _voterRepository.VoterExistsByEmailAsync(newVoter.Email);
 
