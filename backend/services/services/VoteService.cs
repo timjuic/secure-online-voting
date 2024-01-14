@@ -42,9 +42,12 @@ namespace services.services
                     return ApiResponse<Vote>.MakeFailure(ApiError.ERR_VOTER_DOESNT_EXIST);
                 }
 
+                bool candidateInElection = await _candidateRepository.CandidateExistsInElectionAsync(vote.CandidateId, vote.ElectionId);
+                if (!candidateInElection)
+                    return ApiResponse<Vote>.MakeFailure(ApiError.ERR_CANDIDATE_NOT_IN_ELECTION);
+
 
                 bool voteExists = await _votesRepository.VoteExistsInElectionAsync(vote.VoterId, vote.ElectionId, vote.CandidateId);
-
                 if (voteExists)
                 {
                     return ApiResponse<Vote>.MakeFailure(ApiError.ERR_VOTE_EXISTS_IN_ELECTION);

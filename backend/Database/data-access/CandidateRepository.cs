@@ -81,5 +81,14 @@ namespace Database.data_access
         {
             return await _dbContext.Candidates.AnyAsync(c => c.CandidateId == candidateId);
         }
+
+        public async Task<bool> CandidateExistsInElectionAsync(int candidateId, int electionId)
+        {
+            return await Task.Run(() =>
+                _dbContext.CandidateElections
+                    .Any(ce => ce.CandidateId == candidateId && ce.ElectionId == electionId)
+            );
+        }
+
     }
 }
