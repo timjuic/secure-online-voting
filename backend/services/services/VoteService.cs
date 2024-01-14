@@ -47,6 +47,12 @@ namespace services.services
                     return ApiResponse<Vote>.MakeFailure(ApiError.ERR_CANDIDATE_NOT_IN_ELECTION);
 
 
+                bool voterHasVotedInElection = await _votesRepository.VoterHasVotedInElectionAsync(vote.VoterId, vote.ElectionId);
+                if (voterHasVotedInElection)
+                {
+                    return ApiResponse<Vote>.MakeFailure(ApiError.ERR_VOTER_ALREADY_VOTED);
+                }
+
                 bool voteExists = await _votesRepository.VoteExistsInElectionAsync(vote.VoterId, vote.ElectionId, vote.CandidateId);
                 if (voteExists)
                 {

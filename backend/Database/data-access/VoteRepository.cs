@@ -56,6 +56,12 @@ namespace Database.data_access
             return await _dbContext.Votes.AnyAsync(v => v.VoterId == voterID && v.ElectionId == electionID && v.CandidateId == candidateID);
         }
 
-       
+        public async Task<bool> VoterHasVotedInElectionAsync(int voterId, int electionId)
+        {
+            return await Task.Run(() =>
+                _dbContext.Votes.Any(v => v.VoterId == voterId && v.ElectionId == electionId)
+            );
+        }
+
     }
 }

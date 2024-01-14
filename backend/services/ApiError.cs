@@ -35,6 +35,7 @@ namespace services
         public static ApiError ERR_VOTE_DOESNT_EXIST => new ApiError(35, "ERR_VOTE_DOESNT_EXIST", "Vote with specified ID doesn't exist!");
         public static ApiError ERR_INVALID_EMAIL_DOMAIN => new ApiError(36, "ERR_INVALID_EMAIL_DOMAIN", "Email must end with foi.hr domain");
         public static ApiError ERR_CANDIDATE_NOT_IN_ELECTION => new ApiError(37, "ERR_CANDIDATE_NOT_IN_ELECTION", "Candidate is not in provided election! You can't vote for him!");
+        public static ApiError ERR_VOTER_ALREADY_VOTED => new ApiError(38, "ERR_VOTER_ALREADY_VOTED", "You have already voted in this election!");
 
 
         // Add more static properties as needed
