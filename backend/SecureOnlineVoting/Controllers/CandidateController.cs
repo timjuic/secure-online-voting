@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using services;
 using services.services;
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class CandidateController : ControllerBase
 {
     private readonly CandidateService _service;
@@ -14,7 +14,7 @@ public class CandidateController : ControllerBase
     }
 
     [HttpPost]
-    [Route("Candidates/CreateCandidate")]
+    [Route("create")]
     public async Task<ActionResult<ApiResponse<Candidate>>> CreateCandidate(Candidate candidate)
     {
         ApiResponse<Candidate> response = await _service.CreateCandidateAsync(candidate);
@@ -22,15 +22,15 @@ public class CandidateController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("Candidates/DeleteCandidate")]
+    [Route("delete")]
     public async Task<ActionResult<ApiResponse<bool>>> DeleteCandidate(int candidateID)
     {
         ApiResponse<bool> response = await _service.DeleteCandidateAsync(candidateID);
         return response.ToActionResult();
     }
 
-    [HttpPost]
-    [Route("Candidates/UpdateCandidate")]
+    [HttpPut]
+    [Route("update")]
     public async Task<ActionResult<ApiResponse<bool>>> UpdateCandidate(Candidate candidate)
     {
         ApiResponse<bool> response = await _service.UpdateCandidateAsync(candidate);
@@ -38,7 +38,7 @@ public class CandidateController : ControllerBase
     }
 
     [HttpGet]
-    [Route("Candidates/GetAllCandidates")]
+    [Route("getall")]
     public async Task<ActionResult<ApiResponse<List<Candidate>>>> GetAllCandidates()
     {
         ApiResponse<List<Candidate>> response = await _service.GetAllCandidatesAsync();
@@ -46,7 +46,7 @@ public class CandidateController : ControllerBase
     }
 
     [HttpGet]
-    [Route("Candidates/GetCandidateById")]
+    [Route("getbyid")]
     public async Task<ActionResult<ApiResponse<Candidate>>> GetCandidateById(int candidateID)
     {
         ApiResponse<Candidate> response = await _service.GetCandidateByIdAsync(candidateID);
@@ -54,7 +54,7 @@ public class CandidateController : ControllerBase
     }
 
     [HttpGet]
-    [Route("Candidates/GetCandidateByElection")]
+    [Route("getbyelection")]
     public async Task<ActionResult<ApiResponse<List<Candidate>>>> GetCandidatesByElection(int electionID)
     {
         ApiResponse<List<Candidate>> response = await _service.GetCandidatesByElectionAsync(electionID);

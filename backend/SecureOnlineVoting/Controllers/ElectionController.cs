@@ -6,7 +6,7 @@ using services.services;
 namespace SecureOnlineVoting.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ElectionController : ControllerBase
     {
         private readonly ElectionService _service;
@@ -17,7 +17,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpPost]
-        [Route("Elections/CreateElection")]
+        [Route("create")]
         public async Task<ActionResult<ApiResponse<bool>>> CreateElection(Election election)
         {
             var response = await _service.CreateElectionAsync(election);
@@ -25,7 +25,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpGet]
-        [Route("Elections/GetAllElections")]
+        [Route("getall")]
         public async Task<ActionResult<ApiResponse<List<Election>>>> GetAllElections()
         {
             var response = await _service.GetAllElectionsAsync();
@@ -33,7 +33,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpGet]
-        [Route("Elections/GetElectionById")]
+        [Route("getbyid")]
         public async Task<ActionResult<ApiResponse<Election>>> GetElectionById(int electionID)
         {
             var response = await _service.GetElectionByIdAsync(electionID);
@@ -41,7 +41,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpPut]
-        [Route("Elections/UpdateElection")]
+        [Route("update")]
         public async Task<ActionResult<ApiResponse<bool>>> UpdateElection(Election election)
         {
             var response = await _service.UpdateElectionAsync(election);
@@ -49,7 +49,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpDelete]
-        [Route("Elections/DeleteElection")]
+        [Route("delete")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteElection(int electionID)
         {
             var response = await _service.DeleteElectionAsync(electionID);

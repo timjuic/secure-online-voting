@@ -5,13 +5,13 @@ using services.services;
 namespace SecureOnlineVoting.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class VoteController : ControllerBase
     {
         VoteService service = new VoteService();
 
         [HttpPost]
-        [Route("Votes/CreateVote")]
+        [Route("create")]
         public ActionResult<bool> CreateVoter(Vote vote)
         {
             var response = service.CreateVoteAsync(vote);
@@ -23,7 +23,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpGet]
-        [Route("Votes/GetAllVotes")]
+        [Route("getall")]
         public async Task<ActionResult<List<Vote>>> GetAllVotes()
         {
             var response = await service.GetAllVotesAsync();
@@ -35,7 +35,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpGet]
-        [Route("Votes/GetVoteById")]
+        [Route("getbyid")]
         public async Task<ActionResult<List<Vote>>> GetVoteById(int voteID)
         {
             var response = service.GetVoteByIdAsync(voteID);
@@ -47,7 +47,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpPut]
-        [Route("Votes/UpdateVote")]
+        [Route("update")]
         public ActionResult<bool> UpdateVote(Vote vote)
         {
             var response = service.UpdateVoteAsync(vote);
@@ -59,7 +59,7 @@ namespace SecureOnlineVoting.Controllers
         }
 
         [HttpDelete]
-        [Route("Votes/DeleteVote")]
+        [Route("delete")]
         public ActionResult<bool> DeleteVote(int voteID)
         {
             var response = service.DeleteVoteAsync(voteID);
