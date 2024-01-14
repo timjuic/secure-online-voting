@@ -25,7 +25,8 @@ namespace services.services
             {
 
                 bool electionExists = await _electionRepository.ElectionExistsByIdAsync(vote.ElectionId);
-                if (!electionExists) {
+                if (!electionExists)
+                {
                     return ApiResponse<Vote>.MakeFailure(ApiError.ERR_ELECTION_DOESNT_EXIST);
                 }
 
@@ -51,7 +52,7 @@ namespace services.services
 
                 Vote createdVote = await _votesRepository.CreateVoteAsync(vote);
                 return ApiResponse<Vote>.MakeSuccess(createdVote, "Vote successfully created!");
-
+            }
             catch (Exception ex)
             {
                 // Log the exception if needed
