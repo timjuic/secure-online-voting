@@ -35,13 +35,6 @@ namespace SecureOnlineVoting.Controllers
             return response.ToActionResult();
         }
 
-        [HttpPut]
-        [Route("update")]
-        public async Task<ActionResult<ApiResponse<bool>>> UpdateVote(Vote vote)
-        {
-            ApiResponse<bool> response = await _service.UpdateVoteAsync(vote);
-            return response.ToActionResult();
-        }
 
         [HttpDelete]
         [Route("delete")]
