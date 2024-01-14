@@ -34,6 +34,18 @@ namespace services
             // Assuming the password should be at least 8 characters long and contain letters and numbers
             return !string.IsNullOrEmpty(password) && password.Length >= 8 && Regex.IsMatch(password, "[a-zA-Z]") && Regex.IsMatch(password, "[0-9]");
         }
+
+        public static bool IsEmailFromOrganization(string email, string organizationDomain)
+        {
+            string[] emailParts = email.Split('@');
+
+            if (emailParts.Length == 2)
+            {
+                return emailParts[1].Equals(organizationDomain, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return false;
+        }
     }
 
 }

@@ -45,12 +45,7 @@ namespace services.services
                 };
 
                 return ApiResponse<LoginResponseData>.MakeSuccess(responseData, "Login successful!");
-            
-            
         }
-
-
-
 
 
         public async Task<ApiResponse<bool>> RegisterUserAsync(Voter newVoter)
@@ -76,6 +71,14 @@ namespace services.services
                 {
                     return ApiResponse<bool>.MakeFailure(ApiError.ERR_INVALID_PASSWORD);
                 }
+
+                string organizationDomain = "foi.hr";
+                bool isFoiEmail = ValidationHelper.IsEmailFromOrganization(newVoter.Email, organizationDomain);
+                if (!isFoiEmail)
+                {
+                    return ApiResponse<bool>.MakeFailure(ApiError.ERR_INVALID_EMAIL_DOMAIN);
+                }
+
 
                 bool voterExists = await _voterRepository.VoterExistsByEmailAsync(newVoter.Email);
 
