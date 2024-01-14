@@ -32,10 +32,9 @@ CREATE TABLE CandidateElections (
     candidate_id INTEGER,
     election_id INTEGER,
     PRIMARY KEY (candidate_id, election_id),
-    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id),
-    FOREIGN KEY (election_id) REFERENCES Elections(election_id)
+    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id) ON DELETE CASCADE,
+    FOREIGN KEY (election_id) REFERENCES Elections(election_id) ON DELETE CASCADE
 );
-
 
 -- Votes Table
 CREATE TABLE Votes (
@@ -44,10 +43,11 @@ CREATE TABLE Votes (
     election_id INTEGER,
     candidate_id INTEGER,
     vote_timestamp DATETIME,
-    FOREIGN KEY (voter_id) REFERENCES Voters(voter_id),
-    FOREIGN KEY (election_id) REFERENCES Elections(election_id),
-    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id)
+    FOREIGN KEY (voter_id) REFERENCES Voters(voter_id) ON DELETE CASCADE,
+    FOREIGN KEY (election_id) REFERENCES Elections(election_id) ON DELETE CASCADE,
+    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id) ON DELETE CASCADE
 );
+
 
 -- Sample data for Voters Table
 INSERT INTO Voters (first_name, last_name, email, password, registration_date, is_admin)
