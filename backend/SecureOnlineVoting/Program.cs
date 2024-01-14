@@ -52,4 +52,6 @@ app.UseAuthentication();
 // Enable authorization
 app.UseAuthorization();
 
+app.MapControllers();
+
 app.Run();
