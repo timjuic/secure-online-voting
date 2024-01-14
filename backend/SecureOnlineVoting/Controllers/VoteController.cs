@@ -1,5 +1,6 @@
 ﻿using Database.models;
 using Microsoft.AspNetCore.Mvc;
+using services;
 using services.services;
 
 namespace SecureOnlineVoting.Controllers
@@ -8,66 +9,46 @@ namespace SecureOnlineVoting.Controllers
     [Route("api/[controller]")]
     public class VoteController : ControllerBase
     {
-        VoteService service = new VoteService();
+        VoteService _service = new VoteService();
 
         [HttpPost]
         [Route("create")]
-        public ActionResult<bool> CreateVoter(Vote vote)
+        public async Task<ActionResult<ApiResponse<Vote>>> CreateVote(Vote vote)
         {
-            var response = service.CreateVoteAsync(vote);
-            if (response.IsCanceled == true)
-            {
-                return false;
-            }
-            return true;
+            ApiResponse<Vote> response = await _service.CreateVoteAsync(vote);
+            return response.ToActionResult();
         }
 
         [HttpGet]
         [Route("getall")]
-        public async Task<ActionResult<List<Vote>>> GetAllVotes()
+        public async Task<ActionResult<ApiResponse<List<Vote>>>> GetAllVotes()
         {
-            var response = await service.GetAllVotesAsync();
-            if (response.Count > 0)
-            {
-                return Ok(response);
-            }
-            return null;
+            ApiResponse<List<Vote>> response = await _service.GetAllVotesAsync();
+            return response.ToActionResult();
         }
 
         [HttpGet]
         [Route("getbyid")]
-        public async Task<ActionResult<List<Vote>>> GetVoteById(int voteID)
+        public async Task<ActionResult<ApiResponse<Vote>>> GetVoteById(int voteID)
         {
-            var response = service.GetVoteByIdAsync(voteID);
-            if (response is not null)
-            {
-                return Ok(response);
-            }
-            return null;
+            ApiResponse<Vote> response = await _service.GetVoteByIdAsync(voteID);
+            return response.ToActionResult();
         }
 
         [HttpPut]
         [Route("update")]
-        public ActionResult<bool> UpdateVote(Vote vote)
+        public async Task<ActionResult<ApiResponse<bool>>> UpdateVote(Vote vote)
         {
-            var response = service.UpdateVoteAsync(vote);
-            if (response.IsCanceled == true)
-            {
-                return false;
-            }
-            return true;
+            ApiResponse<bool> response = await _service.UpdateVoteAsync(vote);
+            return response.ToActionResult();
         }
 
         [HttpDelete]
         [Route("delete")]
-        public ActionResult<bool> DeleteVote(int voteID)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteVote(int voteID)
         {
-            var response = service.DeleteVoteAsync(voteID);
-            if (response.IsCanceled == true)
-            {
-                return false;
-            }
-            return true;
+            ApiResponse<bool> response = await _service.DeleteVoteAsync(voteID);
+            return response.ToActionResult();
         }
     }
 }
