@@ -14,6 +14,16 @@ namespace Database.data_access
 
         public async Task CreateElectionAsync(Election election)
         {
+            if (election.StartDate == default)
+            {
+                election.StartDate = DateTime.UtcNow;
+            }
+
+            if (election.IsActive == default)
+            {
+                election.IsActive = 1;
+            }
+
             _dbContext.Elections.Add(election);
             await _dbContext.SaveChangesAsync();
         }
@@ -49,6 +59,11 @@ namespace Database.data_access
                 _dbContext.Elections.Remove(election);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> ElectionExistsByTitleAsync(string electionTitle)
+        {
+            return await _dbContext.Elections.AnyAsync(e => e.Title == electionTitle);
         }
     }
 }

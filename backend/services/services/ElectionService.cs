@@ -1,6 +1,7 @@
 ﻿using Database;
 using Database.data_access;
 using Database.models;
+using Database.requests;
 
 namespace services.services
 {
@@ -13,20 +14,33 @@ namespace services.services
             _electionRepository = RepositoryDependencyProvider.GetElectionRepository();
         }
 
-        public async Task<ApiResponse<bool>> CreateElectionAsync(Election election)
+        public async Task<ApiResponse<bool>> CreateElectionAsync(CreateElectionRequest electionRequest)
         {
             try
             {
-                // Additional business logic/validation can be added here
+                bool electionExists = await _electionRepository.ElectionExistsByTitleAsync(electionRequest.Title);
+                if (electionExists)
+                {
+                    return ApiResponse<bool>.MakeFailure(ApiError.ERR_ELECTION_TITLE_DUPLICATE);
+                }
+
+                var election = new Election
+                {
+                    Title = electionRequest.Title,
+                    Description = electionRequest.Description,
+                    EndDate = electionRequest.EndDate ?? DateTime.UtcNow.AddDays(7),
+                };
+
                 await _electionRepository.CreateElectionAsync(election);
                 return ApiResponse<bool>.MakeSuccess(true, "Election created successfully");
             }
             catch (Exception ex)
             {
-                // Log the exception if needed
                 return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
             }
         }
+
+
 
         public async Task<ApiResponse<List<Election>>> GetAllElectionsAsync()
         {

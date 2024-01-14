@@ -33,6 +33,7 @@ namespace services
         public static ApiError ERR_CANDIDATE_NAME_DUPLICATE => new ApiError(33, "ERR_CANDIDATE_NAME_DUPLICATE", "Candidate with that name already exists!");
         public static ApiError ERR_INVALID_EMAIL_DOMAIN => new ApiError(34, "ERR_INVALID_EMAIL_DOMAIN", "Email must end with foi.hr domain");
 
+
         // Add more static properties as needed
     }
 }

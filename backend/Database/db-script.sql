@@ -22,9 +22,9 @@ CREATE TABLE Elections (
     election_id INTEGER PRIMARY KEY,
     title TEXT UNIQUE,
     description TEXT,
-    start_date DATETIME,
+    start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     end_date DATETIME,
-    is_active INTEGER
+    is_active INTEGER DEFAULT 1
 );
 
 -- CandidateElections Table

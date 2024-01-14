@@ -4,7 +4,6 @@ using Database.models;
 using Database.requests;
 using Database.responses;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
 
 namespace services.services
 {

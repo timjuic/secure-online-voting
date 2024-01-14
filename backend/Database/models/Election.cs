@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Database.models
 {
@@ -21,13 +23,14 @@ namespace Database.models
         public string Description { get; set; }
 
         [Column("start_date")]
+        [DefaultValue("CURRENT_TIMESTAMP")] // Add this attribute
         public DateTime StartDate { get; set; }
 
         [Column("end_date")]
         public DateTime EndDate { get; set; }
 
         [Column("is_active")]
-        public int IsActive { get; set; }
+        public int? IsActive { get; set; } // Change to int?
 
         // Navigation properties
         public List<CandidateElection>? CandidateElections { get; set; }

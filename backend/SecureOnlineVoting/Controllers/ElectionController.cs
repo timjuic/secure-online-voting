@@ -1,7 +1,9 @@
 ﻿using Database.models;
+using Database.requests;
 using Microsoft.AspNetCore.Mvc;
 using services;
 using services.services;
+using System.CodeDom;
 
 namespace SecureOnlineVoting.Controllers
 {
@@ -18,7 +20,7 @@ namespace SecureOnlineVoting.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<ActionResult<ApiResponse<bool>>> CreateElection(Election election)
+        public async Task<ActionResult<ApiResponse<bool>>> CreateElection(CreateElectionRequest election)
         {
             var response = await _service.CreateElectionAsync(election);
             return response.ToActionResult();
