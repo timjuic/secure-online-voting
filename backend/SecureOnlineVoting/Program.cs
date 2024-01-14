@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +32,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -51,7 +54,5 @@ app.UseAuthentication();
 
 // Enable authorization
 app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
