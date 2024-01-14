@@ -16,6 +16,9 @@ namespace Database.data_access
         public async Task<Vote> CreateVoteAsync(Vote vote)
         {
             _dbContext.Entry(vote).State = EntityState.Detached;
+
+            vote.VoteTimestamp = DateTime.UtcNow;
+
             _dbContext.Votes.Add(vote);
             await _dbContext.SaveChangesAsync();
 

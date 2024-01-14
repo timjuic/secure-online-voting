@@ -30,8 +30,10 @@ namespace Database.models
 
         // Navigation properties
         [JsonIgnore]
-        public Voter Voter { get; set; }
-        public Election Election { get; set; }
-        public Candidate Candidate { get; set; }
+        public Voter? Voter { get; set; }
+        [JsonIgnore]
+        public Election? Election { get; set; }
+        [JsonIgnore]
+        public Candidate? Candidate { get; set; }
     }
 }

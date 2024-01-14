@@ -7,16 +7,41 @@ namespace services.services
     public class VoteService
     {
         private readonly VoteRepository _votesRepository;
+        private readonly ElectionRepository _electionRepository;
+        private readonly VoterRepository _voterRepository;
+        private readonly CandidateRepository _candidateRepository;
 
         public VoteService()
         {
             _votesRepository = RepositoryDependencyProvider.GetVoteRepository();
+            _electionRepository = RepositoryDependencyProvider.GetElectionRepository();
+            _voterRepository = RepositoryDependencyProvider.GetVoterRepository();
+            _candidateRepository = RepositoryDependencyProvider.GetCandidateRepository();
         }
 
         public async Task<ApiResponse<Vote>> CreateVoteAsync(Vote vote)
         {
             try
             {
+
+                bool electionExists = await _electionRepository.ElectionExistsByIdAsync(vote.ElectionId);
+                if (!electionExists) {
+                    return ApiResponse<Vote>.MakeFailure(ApiError.ERR_ELECTION_DOESNT_EXIST);
+                }
+
+                bool candidateExists = await _candidateRepository.CandidateExistsByIdAsync(vote.CandidateId);
+                if (!candidateExists)
+                {
+                    return ApiResponse<Vote>.MakeFailure(ApiError.ERR_CANDIDATE_DOESNT_EXIST);
+                }
+
+                bool voterExists = await _voterRepository.VoterExistsByIdAsync(vote.VoterId);
+                if (!voterExists)
+                {
+                    return ApiResponse<Vote>.MakeFailure(ApiError.ERR_VOTER_DOESNT_EXIST);
+                }
+
+
                 bool voteExists = await _votesRepository.VoteExistsInElectionAsync(vote.VoterId, vote.ElectionId, vote.CandidateId);
 
                 if (voteExists)
@@ -26,7 +51,7 @@ namespace services.services
 
                 Vote createdVote = await _votesRepository.CreateVoteAsync(vote);
                 return ApiResponse<Vote>.MakeSuccess(createdVote, "Vote successfully created!");
-            }
+
             catch (Exception ex)
             {
                 // Log the exception if needed

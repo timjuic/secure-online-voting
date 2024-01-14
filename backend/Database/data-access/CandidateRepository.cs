@@ -76,5 +76,10 @@ namespace Database.data_access
             return await _dbContext.Candidates
                 .AnyAsync(c => c.Name == candidateName && c.CandidateId != candidateIdToExclude);
         }
+
+        public async Task<bool> CandidateExistsByIdAsync(int candidateId)
+        {
+            return await _dbContext.Candidates.AnyAsync(c => c.CandidateId == candidateId);
+        }
     }
 }

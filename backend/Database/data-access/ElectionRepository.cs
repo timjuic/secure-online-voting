@@ -65,5 +65,10 @@ namespace Database.data_access
         {
             return await _dbContext.Elections.AnyAsync(e => e.Title == electionTitle);
         }
+
+        public async Task<bool> ElectionExistsByIdAsync(int electionId)
+        {
+            return await _dbContext.Elections.AnyAsync(e => e.ElectionId == electionId);
+        }
     }
 }

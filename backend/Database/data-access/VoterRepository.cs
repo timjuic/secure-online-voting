@@ -68,5 +68,10 @@ namespace Database.data_access
             return await _dbContext.Voters
                 .AnyAsync(u => u.Email == email && password == u.Password);
         }
+
+        public async Task<bool> VoterExistsByIdAsync(int voterId)
+        {
+            return await _dbContext.Voters.AnyAsync(v => v.VoterId == voterId);
+        }
     }
 }
