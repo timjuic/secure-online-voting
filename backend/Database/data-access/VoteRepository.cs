@@ -1,5 +1,6 @@
 ﻿using Database.models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace Database.data_access
 {
@@ -12,10 +13,13 @@ namespace Database.data_access
             _dbContext = dbContext;
         }
 
-        public async Task CreateVoteAsync(Vote vote)
+        public async Task<Vote> CreateVoteAsync(Vote vote)
         {
+            _dbContext.Entry(vote).State = EntityState.Detached;
             _dbContext.Votes.Add(vote);
             await _dbContext.SaveChangesAsync();
+
+            return vote;
         }
 
         public async Task<List<Vote>> GetAllVotesAsync()
@@ -43,5 +47,12 @@ namespace Database.data_access
                 await _dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> VoteExistsInElectionAsync(int voterID, int electionID, int candidateID)
+        {
+            return await _dbContext.Votes.AnyAsync(v => v.VoterId == voterID && v.ElectionId == electionID && v.CandidateId == candidateID);
+        }
+
+       
     }
 }

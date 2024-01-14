@@ -19,7 +19,7 @@ namespace Database.data_access
             return candidate;
         }
 
-
+        
         public async Task<List<Candidate>> GetAllCandidatesAsync()
         {
             return await _dbContext.Candidates.ToListAsync();

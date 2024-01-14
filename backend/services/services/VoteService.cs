@@ -13,32 +13,95 @@ namespace services.services
             _votesRepository = RepositoryDependencyProvider.GetVoteRepository();
         }
 
-        public async Task CreateVoteAsync(Vote vote)
+        public async Task<ApiResponse<Vote>> CreateVoteAsync(Vote vote)
         {
-            // Additional business logic/validation can be added here
-            await _votesRepository.CreateVoteAsync(vote);
+            try
+            {
+                bool voteExists = await _votesRepository.VoteExistsInElectionAsync(vote.VoterId, vote.ElectionId, vote.CandidateId);
+
+                if (voteExists)
+                {
+                    return ApiResponse<Vote>.MakeFailure(ApiError.ERR_VOTE_EXISTS_IN_ELECTION);
+                }
+
+                Vote createdVote = await _votesRepository.CreateVoteAsync(vote);
+                return ApiResponse<Vote>.MakeSuccess(createdVote, "Vote successfully created!");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<Vote>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task<List<Vote>> GetAllVotesAsync()
+        public async Task<ApiResponse<List<Vote>>> GetAllVotesAsync()
         {
-            return await _votesRepository.GetAllVotesAsync();
+            try
+            {
+                var votes = await _votesRepository.GetAllVotesAsync();
+                return ApiResponse<List<Vote>>.MakeSuccess(votes);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<List<Vote>>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task<Vote> GetVoteByIdAsync(int voteId)
+        public async Task<ApiResponse<Vote>> GetVoteByIdAsync(int voteId)
         {
-            return await _votesRepository.GetVoteByIdAsync(voteId);
+            try
+            {
+                var vote = await _votesRepository.GetVoteByIdAsync(voteId);
+                return vote != null ? ApiResponse<Vote>.MakeSuccess(vote) : ApiResponse<Vote>.MakeFailure(ApiError.ERR_VOTE_DOESNT_EXIST);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<Vote>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task UpdateVoteAsync(Vote vote)
+        public async Task<ApiResponse<bool>> UpdateVoteAsync(Vote vote)
         {
-            // Additional business logic/validation can be added here
-            await _votesRepository.UpdateVoteAsync(vote);
+            try
+            {
+                bool voteExists = await _votesRepository.VoteExistsInElectionAsync(vote.VoterId, vote.ElectionId, vote.CandidateId);
+
+                if (!voteExists)
+                {
+                    return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+                }
+
+                await _votesRepository.UpdateVoteAsync(vote);
+                return ApiResponse<bool>.MakeSuccess(true);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
 
-        public async Task DeleteVoteAsync(int voteId)
+        public async Task<ApiResponse<bool>> DeleteVoteAsync(int voteId)
         {
-            // Additional business logic/validation can be added here
-            await _votesRepository.DeleteVoteAsync(voteId);
+            try
+            {
+                Vote vote = await _votesRepository.GetVoteByIdAsync(voteId);
+
+                if (vote == null)
+                {
+                    return ApiResponse<bool>.MakeFailure(ApiError.ERR_VOTE_DOESNT_EXIST);
+                }
+
+                await _votesRepository.DeleteVoteAsync(voteId);
+
+                return ApiResponse<bool>.MakeSuccess(true, $"Vote with ID: {voteId} was successfully deleted!");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
+            }
         }
     }
 }
