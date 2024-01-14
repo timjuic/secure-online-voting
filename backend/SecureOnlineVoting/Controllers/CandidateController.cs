@@ -1,7 +1,9 @@
 ﻿using Database.models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using services;
 using services.services;
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CandidateController : ControllerBase

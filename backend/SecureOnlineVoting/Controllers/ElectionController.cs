@@ -1,5 +1,6 @@
 ﻿using Database.models;
 using Database.requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using services;
 using services.services;
@@ -7,6 +8,7 @@ using System.CodeDom;
 
 namespace SecureOnlineVoting.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ElectionController : ControllerBase
