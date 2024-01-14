@@ -32,8 +32,8 @@ CREATE TABLE CandidateElections (
     candidate_id INTEGER,
     election_id INTEGER,
     PRIMARY KEY (candidate_id, election_id),
-    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id) ON DELETE CASCADE,
-    FOREIGN KEY (election_id) REFERENCES Elections(election_id) ON DELETE CASCADE
+    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (election_id) REFERENCES Elections(election_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Votes Table
@@ -43,9 +43,9 @@ CREATE TABLE Votes (
     election_id INTEGER,
     candidate_id INTEGER,
     vote_timestamp DATETIME,
-    FOREIGN KEY (voter_id) REFERENCES Voters(voter_id) ON DELETE CASCADE,
-    FOREIGN KEY (election_id) REFERENCES Elections(election_id) ON DELETE CASCADE,
-    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id) ON DELETE CASCADE
+    FOREIGN KEY (voter_id) REFERENCES Voters(voter_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (election_id) REFERENCES Elections(election_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (candidate_id) REFERENCES Candidates(candidate_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 

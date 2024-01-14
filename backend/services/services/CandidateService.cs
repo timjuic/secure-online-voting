@@ -19,7 +19,13 @@ namespace services.services
         {
             try
             {
-                // Additional business logic/validation can be added here
+                bool candidateExists = await _candidateRepository.CandidateExistsByNameAsync(candidate.Name);
+
+                if (candidateExists)
+                {
+                    return ApiResponse<Candidate>.MakeFailure(ApiError.ERR_CANDIDATE_NAME_DUPLICATE);
+                }
+
                 Candidate createdCandidate = await _candidateRepository.CreateCandidateAsync(candidate);
                 return ApiResponse<Candidate>.MakeSuccess(createdCandidate, "Candidate successfully created!");
             }
@@ -83,6 +89,14 @@ namespace services.services
         {
             try
             {
+                // Check if any candidate with the same name exists, excluding the current candidate
+                bool candidateExists = await _candidateRepository.CandidateExistsWithNameAsync(candidate.Name, candidate.CandidateId);
+
+                if (candidateExists)
+                {
+                    return ApiResponse<bool>.MakeFailure(ApiError.ERR_CANDIDATE_NAME_DUPLICATE);
+                }
+
                 await _candidateRepository.UpdateCandidateAsync(candidate);
                 return ApiResponse<bool>.MakeSuccess(true);
             }
@@ -91,6 +105,7 @@ namespace services.services
                 return ApiResponse<bool>.MakeFailure(ApiError.ERR_DATABASE_ERROR);
             }
         }
+
 
         public async Task<ApiResponse<bool>> DeleteCandidateAsync(int candidateId)
         {

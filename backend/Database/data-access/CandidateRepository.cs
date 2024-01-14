@@ -40,9 +40,21 @@ namespace Database.data_access
 
         public async Task UpdateCandidateAsync(Candidate candidate)
         {
-            _dbContext.Entry(candidate).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            var existingCandidate = await _dbContext.Candidates
+                .FirstOrDefaultAsync(c => c.CandidateId == candidate.CandidateId);
+
+            if (existingCandidate != null)
+            {
+                _dbContext.Candidates.Attach(existingCandidate);
+                existingCandidate.Name = candidate.Name;  // Update other properties similarly
+                existingCandidate.PartyAffiliation = candidate.PartyAffiliation;
+                existingCandidate.Position = candidate.Position;
+
+                await _dbContext.SaveChangesAsync();
+            }
         }
+
+
 
         public async Task DeleteCandidateAsync(int candidateId)
         {
@@ -52,6 +64,17 @@ namespace Database.data_access
                 _dbContext.Candidates.Remove(candidate);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> CandidateExistsByNameAsync(string candidateName)
+        {
+            return await _dbContext.Candidates.AnyAsync(c => c.Name == candidateName);
+        }
+
+        public async Task<bool> CandidateExistsWithNameAsync(string candidateName, int candidateIdToExclude)
+        {
+            return await _dbContext.Candidates
+                .AnyAsync(c => c.Name == candidateName && c.CandidateId != candidateIdToExclude);
         }
     }
 }
