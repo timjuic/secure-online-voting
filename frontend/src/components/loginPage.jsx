@@ -1,25 +1,38 @@
-import React from 'react';
-import { TextField, Button, Paper, Typography, Container } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import { TextField, Button, Paper, Typography, Container } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "./apiService";
 
 export default function LoginPage() {
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-
-    // TODO: Implement login logic here
-    navigate('/election');
+    try {
+      const response = await loginUser({
+        email: data.get("email"),
+        password: data.get("password"),
+      });
+      console.log(response.data);
+      navigate("/election");
+    } catch (error) {
+      console.error(error.response ? error.response.data : error.message);
+    }
   };
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8 }}>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 2,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 8,
+        }}
+      >
         <Typography component="h1" variant="h5">
           Login
         </Typography>
@@ -56,9 +69,7 @@ export default function LoginPage() {
             Login
           </Button>
           <Typography align="center" variant="body2">
-            <Link to="/register">
-              Don't have an account? Register
-            </Link>
+            <Link to="/register">Don't have an account? Register</Link>
           </Typography>
         </form>
       </Paper>

@@ -6,7 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
+// Add services to the container.
+
 builder.Services.AddControllers();
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWebApp",
+        policy => policy.WithOrigins("http://localhost:3000") // Replace with the actual origin of your React app
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
 
 // JWT Authentication
 builder.Services.AddAuthentication(options =>
@@ -31,13 +42,13 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -45,6 +56,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS policy
+app.UseCors("AllowWebApp");
 
 // Enable authentication
 app.UseAuthentication();

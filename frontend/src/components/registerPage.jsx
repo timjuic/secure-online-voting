@@ -1,26 +1,50 @@
-import React from 'react';
+import React, { useState } from "react";
+import { TextField, Button, Paper, Typography, Container } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "./apiService"; // Ensure this path is correct
 
-import { TextField, Button, Paper, Typography, Container } from '@mui/material';
-import { Link } from 'react-router-dom';
+export default function RegisterPage() {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
 
-export default function registerPage() {
-  const handleSubmit = (event) => {
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setUserData({ ...userData, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // todo data
-    console.log({
-      email: data.get('email'),
-      identificationNumber: data.get('identificationNumber'),
-      fullName: data.get('fullName'),
-      dateOfBirth: data.get('dateOfBirth'),
-      password: data.get('password'),
-      confirmPassword: data.get('confirmPassword'),
-    });
+    try {
+      const response = await registerUser({
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        password: userData.password,
+      });
+      console.log(response.data);
+      navigate("/login");
+    } catch (error) {
+      console.error(error.response ? error.response.data : error.message);
+    }
   };
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 8 }}>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 2,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 8,
+        }}
+      >
         <Typography component="h1" variant="h5">
           Register
         </Typography>
@@ -30,65 +54,49 @@ export default function registerPage() {
             margin="normal"
             required
             fullWidth
+            id="firstName"
+            label="First Name"
+            name="firstName"
+            autoComplete="fname"
+            value={userData.firstName}
+            onChange={handleChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="lastName"
+            label="Last Name"
+            name="lastName"
+            autoComplete="lname"
+            value={userData.lastName}
+            onChange={handleChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
             id="email"
             label="Email Address"
             name="email"
             autoComplete="email"
+            value={userData.email}
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="identificationNumber"
-            label="Identification Number"
-            name="identificationNumber"
-            autoComplete="identification-number"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="fullName"
-            label="Full Name"
-            name="fullName"
-            autoComplete="name"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="dateOfBirth"
-            label="Date of Birth"
-            name="dateOfBirth"
-            type="date"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
+            id="password"
             label="Password"
             type="password"
-            id="password"
+            name="password"
             autoComplete="new-password"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            id="confirmPassword"
-            autoComplete="new-password"
+            value={userData.password}
+            onChange={handleChange}
           />
           <Button
             type="submit"
@@ -100,9 +108,7 @@ export default function registerPage() {
             Register
           </Button>
           <Typography align="center" variant="body2">
-            <Link to="/login">
-            Already have an account? Login
-            </Link>
+            <Link to="/login">Already have an account? Login</Link>
           </Typography>
         </form>
       </Paper>
