@@ -10,7 +10,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function ElectionPage() {
   const navigate = useNavigate();
@@ -23,14 +23,17 @@ export default function ElectionPage() {
 
   const handleSubmit = () => {
     console.log(`Election selected: ${election}`);
-    navigate('/vote');
+    navigate("/vote");
   };
 
   return (
     <>
       <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
+        <Toolbar style={{ justifyContent: "flex-start" }}>
+          <Typography
+            variant="h6"
+            style={{ marginLeft: "30%", paddingRight: "500px" }}
+          >
             OVS
           </Typography>
           <Button color="inherit">Elections</Button>
@@ -51,9 +54,7 @@ export default function ElectionPage() {
             Choose Election
           </Typography>
           <FormControl fullWidth>
-            <InputLabel id="election-select-label">
-              Elections...
-            </InputLabel>
+            <InputLabel id="election-select-label">Elections...</InputLabel>
             <Select
               labelId="election-select-label"
               id="election-select"

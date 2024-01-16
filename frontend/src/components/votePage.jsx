@@ -1,9 +1,11 @@
-import React from 'react';
-import { Paper, Typography, RadioGroup, FormControlLabel, Radio, Button, Container } from '@mui/material';
-
+import React, { useState } from 'react';
+import { Paper, Typography, RadioGroup, FormControlLabel, Radio, Button, Container, Dialog, DialogTitle, DialogActions } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function VotePage() {
-    const [selectedOption, setSelectedOption] = React.useState('');
+  const navigate = useNavigate();
+  const [selectedOption, setSelectedOption] = useState('');
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value);
@@ -11,7 +13,12 @@ export default function VotePage() {
 
   const handleVoteSubmit = () => {
     console.log(`Voted for: ${selectedOption}`);
+    setOpenDialog(true);
+  };
 
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    navigate('/election');
   };
 
   return (
@@ -35,6 +42,16 @@ export default function VotePage() {
           Vote
         </Button>
       </Paper>
+
+      {/* Dialog for Thank You message */}
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle>Thank you for your vote!</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
