@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -11,6 +11,8 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { getAllElections } from "./apiService";
+
 
 export default function ElectionPage() {
   const navigate = useNavigate();
@@ -25,6 +27,19 @@ export default function ElectionPage() {
     console.log(`Election selected: ${election}`);
     navigate("/vote");
   };
+
+  
+  useEffect(() => {
+    const fetchElections = async () => {
+      try {
+        const elections = await getAllElections();
+      } catch (error) {
+        console.error("Failed to fetch elections:", error);
+      }
+    };
+
+    fetchElections();
+  }, []);
 
   return (
     <>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Paper, Typography, RadioGroup, FormControlLabel, Radio, Button, Container, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { submitVote } from "./apiService";
+
 
 export default function VotePage() {
   const navigate = useNavigate();
@@ -11,9 +13,14 @@ export default function VotePage() {
     setSelectedOption(event.target.value);
   };
 
-  const handleVoteSubmit = () => {
-    console.log(`Voted for: ${selectedOption}`);
-    setOpenDialog(true);
+  const handleVoteSubmit = async () => {
+    try {
+      const result = await submitVote(selectedOption); 
+      console.log(result);
+      setOpenDialog(true);
+    } catch (error) {
+      console.error("Failed to submit vote:", error);
+    }
   };
 
   const handleDialogClose = () => {
@@ -21,6 +28,7 @@ export default function VotePage() {
     navigate('/election');
   };
 
+  
   return (
     <Container component="main" maxWidth="xs">
       <Paper elevation={3} sx={{ p: 2, mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

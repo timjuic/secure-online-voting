@@ -14,12 +14,13 @@ export default function LoginPage() {
         email: data.get("email"),
         password: data.get("password"),
       });
-      console.log(response.data);
+      localStorage.setItem('token', response.data.token);
       navigate("/election");
     } catch (error) {
       console.error(error.response ? error.response.data : error.message);
     }
   };
+  
 
   return (
     <Container component="main" maxWidth="xs">
